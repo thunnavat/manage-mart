@@ -19,6 +19,7 @@ const addProduct = async (req, res) => {
       productQuantity,
       productImage,
     } = req.body;
+    if (productName === "") return res.status(400).json({ message: "Product name is required" });
     const newProduct = await product.create({
       productId: productId,
       productName: productName,
@@ -33,7 +34,33 @@ const addProduct = async (req, res) => {
   }
 };
 
-const updateProduct = async (req, res) => {}
+const updateProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const editProduct = {
+      productName: req.body.productName,
+      productCost: req.body.productCost,
+      productPrice: req.body.productPrice,
+      productQuantity: req.body.productQuantity,
+    }
+    if (editProduct.productName === "") return res.status(400).json({ message: "Product name is required" });
+    const productToUpdate = await product.findOne({
+      where: { productId: productId },
+    });
+    if (productToUpdate) {
+      productToUpdate.productName = editProduct.productName
+      productToUpdate.productCost = editProduct.productCost
+      productToUpdate.productPrice = editProduct.productPrice
+      productToUpdate.productQuantity = editProduct.productQuantity
+      await productToUpdate.save();
+      res.status(200).json(productToUpdate);
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 const deleteProduct = async (req, res) => {
   try {
@@ -47,7 +74,7 @@ const deleteProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 module.exports = {
   getAllProducts,
