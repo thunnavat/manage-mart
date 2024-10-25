@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = '/api/products'
+const host = import.meta.env.PROD ? import.meta.env.VITE_APP_PROD_API_URL : import.meta.env.VITE_APP_DEV_API_URL
+const API_URL = `${host}/products`
 
 export const getProducts = async () => {
   try {
