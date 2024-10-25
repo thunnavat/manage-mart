@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import router from '@/router'
 import BaseHeader from '@/components/BaseHeader.vue'
 import { updateProduct } from '@/utils/services/productService'
 const props = defineProps({
@@ -7,6 +8,14 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+})
+
+const editProduct = ref({
+  productId: props.product.productId,
+  productName: props.product.productName,
+  productCost: props.product.productCost,
+  productPrice: props.product.productPrice,
+  productQuantity: props.product.productQuantity,
 })
 
 const validationRules = {
@@ -17,12 +26,26 @@ const validationRules = {
   productQuantity: [v => !!v || 'จำนวนสินค้าไม่สามารถเว้นว่างได้'],
 }
 
-const editProduct = ref({
-  productId: props.product.productId,
-  productName: props.product.productName,
-  productCost: props.product.productCost,
-  productPrice: props.product.productPrice,
-  productQuantity: props.product.productQuantity,
+const barcode = ref('')
+const interval = ref()
+document.addEventListener('keydown', event => {
+  if (interval.value) {
+    clearInterval(interval.value)
+  }
+  if (event.code === 'Enter') {
+    console.log(barcode.value)
+    if (barcode.value && Number(barcode.value) === props.product.productId) {
+      editProduct.value.productQuantity += 1
+    }
+    barcode.value = ''
+    return
+  }
+  if (event.key !== 'Shift') {
+    barcode.value += event.key
+    interval.value = setInterval(() => {
+      barcode.value = ''
+    }, 100)
+  }
 })
 
 const editProductHandler = async () => {
@@ -32,6 +55,7 @@ const editProductHandler = async () => {
   )
   if (response.status === 200) {
     alert('แก้ไขสินค้าสำเร็จ')
+    router.go()
   } else {
     alert('แก้ไขสินค้าไม่สำเร็จ')
   }
@@ -69,7 +93,6 @@ const editProductHandler = async () => {
         label="จำนวนสินค้า"
       />
       <v-btn
-        type="submit"
         @click="editProductHandler"
         block
       >

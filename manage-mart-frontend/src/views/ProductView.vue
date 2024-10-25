@@ -1,11 +1,9 @@
 <script setup>
-import ProductList from '@/components/products/ProductList.vue';
-import BaseHeader from '@/components/BaseHeader.vue';
+import ProductList from '@/components/products/ProductList.vue'
 </script>
 
 <template>
   <div>
-    <BaseHeader text="รายการสินค้า" />
     <ProductList />
   </div>
 </template>

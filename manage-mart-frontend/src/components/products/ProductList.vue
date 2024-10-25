@@ -3,6 +3,7 @@ import { ref, onBeforeMount } from 'vue'
 import { getProducts, deleteProduct } from '@/utils/services/productService.js'
 import AddProduct from '@/components/products/AddProduct.vue'
 import EditProduct from '@/components/products/EditProduct.vue'
+import BaseHeader from '@/components/BaseHeader.vue'
 
 const products = ref([])
 const search = ref('')
@@ -22,6 +23,28 @@ const headers = [
 
 onBeforeMount(async () => {
   products.value = await getProducts().then(response => response.data)
+})
+
+const barcode = ref('')
+const interval = ref()
+document.addEventListener('keydown', event => {
+  if (interval.value) {
+    clearInterval(interval.value)
+  }
+  if (event.code === 'Enter') {
+    console.log(barcode.value)
+    if (barcode.value) {
+      search.value = barcode.value
+    }
+    barcode.value = ''
+    return
+  }
+  if (event.key !== 'Shift') {
+    barcode.value += event.key
+    interval.value = setInterval(() => {
+      barcode.value = ''
+    }, 100)
+  }
 })
 </script>
 
@@ -50,6 +73,19 @@ onBeforeMount(async () => {
     </template>
   </v-dialog>
 
+  <BaseHeader text="รายการสินค้า" />
+
+  <v-text-field
+    v-model="search"
+    density="compact"
+    label="Search"
+    prepend-inner-icon="mdi-magnify"
+    variant="solo-filled"
+    flat
+    hide-details
+    single-line
+  ></v-text-field>
+
   <v-data-table
     :items="products"
     :headers="headers"
@@ -67,17 +103,17 @@ onBeforeMount(async () => {
           </v-icon>
         </template>
         <template v-slot:default="{ isActive }">
-      <v-card>
-        <EditProduct :product="item" />
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            text="ยกเลิก"
-            @click="isActive.value = false"
-          ></v-btn>
-        </v-card-actions>
-      </v-card>
-    </template>
+          <v-card>
+            <EditProduct :product="item" />
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                text="ยกเลิก"
+                @click="isActive.value = false"
+              ></v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
       </v-dialog>
 
       <v-icon

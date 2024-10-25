@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import router from '@/router'
 import { addProduct } from '@/utils/services/productService.js'
 import BaseHeader from '@/components/BaseHeader.vue'
 
@@ -18,6 +19,28 @@ const validationRules = {
   productPrice: [v => !!v || 'ราคาสินค้าไม่สามารถเว้นว่างได้'],
   productQuantity: [v => !!v || 'จำนวนสินค้าไม่สามารถเว้นว่างได้'],
 }
+
+const barcode = ref('')
+const interval = ref()
+document.addEventListener('keydown', event => {
+  if (interval.value) {
+    clearInterval(interval.value)
+  }
+  if (event.code === 'Enter') {
+    console.log(barcode.value)
+    if (barcode.value) {
+      newProduct.value.productId = barcode.value
+    }
+    barcode.value = ''
+    return
+  }
+  if (event.key !== 'Shift') {
+    barcode.value += event.key
+    interval.value = setInterval(() => {
+      barcode.value = ''
+    }, 100)
+  }
+})
 
 const resetForm = () => {
   this.$refs.form.reset()
@@ -45,6 +68,7 @@ const addProductHandler = async () => {
   if (response.status === 201) {
     resetForm()
     alert('เพิ่มสินค้าสำเร็จ')
+    router.go()
   } else {
     alert('เพิ่มสินค้าไม่สำเร็จ')
   }
@@ -81,7 +105,6 @@ const addProductHandler = async () => {
         label="จำนวนสินค้า"
       />
       <v-btn
-        type="submit"
         @click="addProductHandler"
         block
       >

@@ -11,7 +11,7 @@ export const getProducts = async () => {
   }
 }
 
-export const addProduct = async (product) => {
+export const addProduct = async product => {
   try {
     const response = await axios.post(API_URL, product, {
       headers: {
@@ -37,7 +37,7 @@ export const updateProduct = async (id, product) => {
   }
 }
 
-export const deleteProduct = async (id) => {
+export const deleteProduct = async id => {
   try {
     const response = await axios.delete(`${API_URL}/${id}`)
     return response
