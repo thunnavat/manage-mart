@@ -29,6 +29,4 @@ coverage
 
 *.tsbuildinfo
 
-/config/db.config.js
-
 .env
