@@ -8,8 +8,7 @@ import { RouterLink, RouterView } from 'vue-router'
       alt="Vue logo"
       class="logo"
       src="@/assets/logo.png"
-      width="200"
-      height="150"
+      width="220"
     />
     <div>
       <nav>

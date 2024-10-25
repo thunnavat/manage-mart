@@ -33,7 +33,25 @@ const addProduct = async (req, res) => {
   }
 };
 
+const updateProduct = async (req, res) => {}
+
+const deleteProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const deleted = await product.destroy({
+      where: { productId: productId },
+    });
+    if (deleted) {
+      res.status(200).send("Product deleted");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getAllProducts,
   addProduct,
+  updateProduct,
+  deleteProduct,
 };
