@@ -11,8 +11,8 @@ const search = ref('')
 const headers = [
   {
     align: 'start',
-    key: 'productId',
-    title: 'รหัสสินค้า',
+    key: 'productBarcode',
+    title: 'บาร์โค้ดสินค้า',
     sortable: false,
   },
   { key: 'productName', title: 'ชื่อสินค้า' },
@@ -48,8 +48,8 @@ document.addEventListener('keydown', event => {
   }
 })
 
-const deleteProductHandler = async productId => {
-  const response = await deleteProduct(productId)
+const deleteProductHandler = async productBarcode => {
+  const response = await deleteProduct(productBarcode)
   if (response.status === 200) {
     router.go()
   } else {
@@ -143,7 +143,7 @@ const deleteProductHandler = async productId => {
               <v-btn
                 color="red"
                 text="ลบ"
-                @click="deleteProductHandler(item.productId)"
+                @click="deleteProductHandler(item.productBarcode)"
               ></v-btn>
               <v-btn
                 text="ยกเลิก"

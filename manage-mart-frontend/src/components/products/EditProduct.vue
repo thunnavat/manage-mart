@@ -13,7 +13,7 @@ const props = defineProps({
 const successDialog = ref(false)
 
 const editProduct = ref({
-  productId: props.product.productId,
+  productBarcode: props.product.productBarcode,
   productName: props.product.productName,
   productCost: props.product.productCost,
   productPrice: props.product.productPrice,
@@ -21,7 +21,7 @@ const editProduct = ref({
 })
 
 const validationRules = {
-  productId: [v => !!v || 'รหัสสินค้าไม่สามารถเว้นว่างได้'],
+  productBarcode: [v => !!v || 'บาร์โค้ดสินค้าไม่สามารถเว้นว่างได้'],
   productName: [v => !!v || 'ชื่อสินค้าไม่สามารถเว้นว่างได้'],
   productCost: [v => !!v || 'ราคาทุนไม่สามารถเว้นว่างได้'],
   productPrice: [v => !!v || 'ราคาสินค้าไม่สามารถเว้นว่างได้'],
@@ -36,7 +36,7 @@ document.addEventListener('keydown', event => {
   }
   if (event.code === 'Enter') {
     console.log(barcode.value)
-    if (barcode.value && barcode.value === props.product.productId) {
+    if (barcode.value && barcode.value === props.product.productBarcode) {
       editProduct.value.productQuantity += 1
     }
     barcode.value = ''
@@ -52,7 +52,7 @@ document.addEventListener('keydown', event => {
 
 const editProductHandler = async () => {
   const response = await updateProduct(
-    editProduct.value.productId,
+    editProduct.value.productBarcode,
     editProduct.value,
   )
   if (response.status === 200) {
@@ -68,10 +68,10 @@ const editProductHandler = async () => {
     <BaseHeader text="แก้ไขข้อมูลสินค้า" />
     <v-form ref="form">
       <v-text-field
-        v-model="editProduct.productId"
-        :rules="validationRules.productId"
+        v-model="editProduct.productBarcode"
+        :rules="validationRules.productBarcode"
         :disabled="true"
-        label="รหัสสินค้า"
+        label="บาร์โค้ดสินค้า"
       />
       <v-text-field
         v-model="editProduct.productName"

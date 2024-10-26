@@ -12,7 +12,7 @@ const getAllProducts = async (req, res) => {
 const addProduct = async (req, res) => {
   try {
     const {
-      productId,
+      productBarcode,
       productName,
       productCost,
       productPrice,
@@ -21,7 +21,7 @@ const addProduct = async (req, res) => {
     } = req.body;
     if (productName === "") return res.status(400).json({ message: "Product name is required" });
     const newProduct = await product.create({
-      productId: productId,
+      productBarcode: productBarcode,
       productName: productName,
       productCost: productCost,
       productPrice: productPrice,
@@ -36,7 +36,7 @@ const addProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    const { productId } = req.params;
+    const { productBarcode } = req.params;
     const editProduct = {
       productName: req.body.productName,
       productCost: req.body.productCost,
@@ -45,7 +45,7 @@ const updateProduct = async (req, res) => {
     }
     if (editProduct.productName === "") return res.status(400).json({ message: "Product name is required" });
     const productToUpdate = await product.findOne({
-      where: { productId: productId },
+      where: { productBarcode: productBarcode },
     });
     if (productToUpdate) {
       productToUpdate.productName = editProduct.productName
@@ -64,9 +64,9 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    const { productId } = req.params;
+    const { productBarcode } = req.params;
     const deleted = await product.destroy({
-      where: { productId: productId },
+      where: { productBarcode: productBarcode },
     });
     if (deleted) {
       res.status(200).send("Product deleted");

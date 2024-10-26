@@ -7,7 +7,7 @@ import BaseHeader from '@/components/BaseHeader.vue'
 const successDialog = ref(false)
 
 const newProduct = ref({
-  productId: '',
+  productBarcode: '',
   productName: '',
   productCost: '',
   productPrice: '',
@@ -15,7 +15,7 @@ const newProduct = ref({
 })
 
 const validationRules = {
-  productId: [v => !!v || 'รหัสสินค้าไม่สามารถเว้นว่างได้'],
+  productBarcode: [v => !!v || 'บาร์โค้ดสินค้าไม่สามารถเว้นว่างได้'],
   productName: [v => !!v || 'ชื่อสินค้าไม่สามารถเว้นว่างได้'],
   productCost: [v => !!v || 'ราคาทุนไม่สามารถเว้นว่างได้'],
   productPrice: [v => !!v || 'ราคาสินค้าไม่สามารถเว้นว่างได้'],
@@ -31,7 +31,7 @@ document.addEventListener('keydown', event => {
   if (event.code === 'Enter') {
     console.log(barcode.value)
     if (barcode.value) {
-      newProduct.value.productId = barcode.value
+      newProduct.value.productBarcode = barcode.value
     }
     barcode.value = ''
     return
@@ -48,7 +48,7 @@ const resetForm = () => {
   this.$refs.form.reset()
   this.$refs.form.resetValidation()
   newProduct.value = {
-    productId: '',
+    productBarcode: '',
     productName: '',
     productCost: '',
     productPrice: '',
@@ -57,10 +57,10 @@ const resetForm = () => {
 }
 
 const addProductHandler = async () => {
-  const { productId, productName, productCost, productPrice, productQuantity } =
+  const { productBarcode, productName, productCost, productPrice, productQuantity } =
     newProduct.value
   const product = {
-    productId,
+    productBarcode,
     productName,
     productCost,
     productPrice,
@@ -81,9 +81,9 @@ const addProductHandler = async () => {
     <BaseHeader text="เพิ่มสินค้า" />
     <v-form ref="form">
       <v-text-field
-        v-model="newProduct.productId"
-        :rules="validationRules.productId"
-        label="รหัสสินค้า"
+        v-model="newProduct.productBarcode"
+        :rules="validationRules.productBarcode"
+        label="บาร์โค้ดสินค้า"
       />
       <v-text-field
         v-model="newProduct.productName"

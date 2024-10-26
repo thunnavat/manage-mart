@@ -21,7 +21,8 @@ USE `managemart` ;
 -- Table `managemart`.`products`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `managemart`.`products` (
-  `productId` VARCHAR(100) NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `productBarcode` VARCHAR(100) NOT NULL,
   `productName` VARCHAR(100) NOT NULL,
   `productCost` DECIMAL(9,2) NOT NULL,
   `productPrice` DECIMAL(9,2) NOT NULL,
@@ -29,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `managemart`.`products` (
   `productImage` VARCHAR(100) NULL,
   `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`productId`))
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
