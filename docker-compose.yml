@@ -25,7 +25,6 @@ services:
     volumes:
       - ../mysql_data:/var/lib/mysql
       - ./dbscript.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: always
 
   reverse-proxy:
     image: nginx:stable-alpine
