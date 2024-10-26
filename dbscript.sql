@@ -22,7 +22,7 @@ USE `managemart` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `managemart`.`products` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `productBarcode` VARCHAR(100) NOT NULL,
+  `productBarcode` VARCHAR(100) NOT NULL UNIQUE,
   `productName` VARCHAR(100) NOT NULL,
   `productCost` DECIMAL(9,2) NOT NULL,
   `productPrice` DECIMAL(9,2) NOT NULL,
