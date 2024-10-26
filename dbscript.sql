@@ -21,7 +21,7 @@ USE `managemart` ;
 -- Table `managemart`.`products`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `managemart`.`products` (
-  `productId` INT NOT NULL,
+  `productId` INT(50) NOT NULL,
   `productName` VARCHAR(100) NOT NULL,
   `productCost` DECIMAL(9,2) NOT NULL,
   `productPrice` DECIMAL(9,2) NOT NULL,
