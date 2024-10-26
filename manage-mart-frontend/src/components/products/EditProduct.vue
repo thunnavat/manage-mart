@@ -36,7 +36,7 @@ document.addEventListener('keydown', event => {
   }
   if (event.code === 'Enter') {
     console.log(barcode.value)
-    if (barcode.value && Number(barcode.value) === props.product.productId) {
+    if (barcode.value && barcode.value === props.product.productId) {
       editProduct.value.productQuantity += 1
     }
     barcode.value = ''
