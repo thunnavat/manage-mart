@@ -4,6 +4,8 @@ import router from '@/router'
 import { addProduct } from '@/utils/services/productService.js'
 import BaseHeader from '@/components/BaseHeader.vue'
 
+const successDialog = ref(false)
+
 const newProduct = ref({
   productId: '',
   productName: '',
@@ -66,9 +68,8 @@ const addProductHandler = async () => {
   }
   const response = await addProduct(product)
   if (response.status === 201) {
+    successDialog.value = true
     resetForm()
-    alert('เพิ่มสินค้าสำเร็จ')
-    router.go()
   } else {
     alert('เพิ่มสินค้าไม่สำเร็จ')
   }
@@ -112,6 +113,22 @@ const addProductHandler = async () => {
       </v-btn>
     </v-form>
   </div>
+  <v-dialog
+    v-model="successDialog"
+    max-width="500"
+  >
+    <v-card>
+      <v-card-title>เพิ่มสินค้าสำเร็จ</v-card-title>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          @click="successDialog = false; router.go()"
+        >
+          ปิด
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped></style>

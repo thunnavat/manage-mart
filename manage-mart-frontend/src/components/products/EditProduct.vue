@@ -10,6 +10,8 @@ const props = defineProps({
   },
 })
 
+const successDialog = ref(false)
+
 const editProduct = ref({
   productId: props.product.productId,
   productName: props.product.productName,
@@ -54,8 +56,7 @@ const editProductHandler = async () => {
     editProduct.value,
   )
   if (response.status === 200) {
-    alert('แก้ไขสินค้าสำเร็จ')
-    router.go()
+    successDialog.value = true
   } else {
     alert('แก้ไขสินค้าไม่สำเร็จ')
   }
@@ -100,6 +101,22 @@ const editProductHandler = async () => {
       </v-btn>
     </v-form>
   </div>
+  <v-dialog
+    v-model="successDialog"
+    max-width="500"
+  >
+    <v-card>
+      <v-card-title>แก้ไขสินค้าสำเร็จ</v-card-title>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          @click="successDialog = false; router.go()"
+        >
+          ปิด
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped></style>

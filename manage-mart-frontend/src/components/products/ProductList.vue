@@ -4,6 +4,7 @@ import { getProducts, deleteProduct } from '@/utils/services/productService.js'
 import AddProduct from '@/components/products/AddProduct.vue'
 import EditProduct from '@/components/products/EditProduct.vue'
 import BaseHeader from '@/components/BaseHeader.vue'
+import router from '@/router'
 
 const products = ref([])
 const search = ref('')
@@ -46,6 +47,15 @@ document.addEventListener('keydown', event => {
     }, 100)
   }
 })
+
+const deleteProductHandler = async productId => {
+  const response = await deleteProduct(productId)
+  if (response.status === 200) {
+    router.go()
+  } else {
+    alert('ลบสินค้าไม่สำเร็จ')
+  }
+}
 </script>
 
 <template>
@@ -115,14 +125,34 @@ document.addEventListener('keydown', event => {
           </v-card>
         </template>
       </v-dialog>
-
-      <v-icon
-        @click="deleteProduct(item.productId)"
-        size="small"
-        color="red"
-      >
-        mdi-delete
-      </v-icon>
+      <v-dialog max-width="500">
+        <template v-slot:activator="{ props: activatorProps }">
+          <v-icon
+            v-bind="activatorProps"
+            size="small"
+            color="red"
+          >
+            mdi-delete
+          </v-icon>
+        </template>
+        <template v-slot:default="{ isActive }">
+          <v-card>
+            <v-card-title>คุณต้องการจะลบสินค้าใช่หรือไม่</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="red"
+                text="ลบ"
+                @click="deleteProductHandler(item.productId)"
+              ></v-btn>
+              <v-btn
+                text="ยกเลิก"
+                @click="isActive.value = false"
+              ></v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-dialog>
     </template>
   </v-data-table>
 </template>
