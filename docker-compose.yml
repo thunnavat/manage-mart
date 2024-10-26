@@ -15,9 +15,9 @@ services:
   db:
     image: mysql:8
     environment:
-      LANG: C.UTF-8
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: managemart
+      - LANG = C.UTF-8
+      - MYSQL_ROOT_PASSWORD = root
+      - MYSQL_DATABASE = managemart
     ports:
       - "3306:3306"
     volumes:
