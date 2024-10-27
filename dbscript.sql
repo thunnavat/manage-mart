@@ -1,4 +1,4 @@
-CREATE DATABASE managemart DEFAULT CHARACTER SET UTF8MB4;
+CREATE DATABASE managemart DEFAULT CHARACTER SET utf8;
 USE managemart;
 
 CREATE TABLE managemart.productcategories (
