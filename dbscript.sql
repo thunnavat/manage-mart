@@ -1,14 +1,14 @@
 CREATE DATABASE managemart DEFAULT CHARACTER SET UTF8MB4;
 USE managemart;
 
-CREATE TABLE productcategories (
+CREATE TABLE IF NOT EXISTS productcategories (
   productCategoryId INT NOT NULL AUTO_INCREMENT,
   productCategoryName VARCHAR(100) NOT NULL,
   PRIMARY KEY (productCategoryId),
   UNIQUE INDEX productCategoryName_UNIQUE (productCategoryName ASC) VISIBLE
 );
 
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
   productId INT NOT NULL AUTO_INCREMENT,
   productBarcode VARCHAR(100) NOT NULL,
   productName VARCHAR(100) NOT NULL,
