@@ -8,6 +8,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  productCategories: {
+    type: Array,
+    required: true,
+  },
 })
 
 const successDialog = ref(false)
@@ -18,6 +22,8 @@ const editProduct = ref({
   productCost: props.product.productCost,
   productPrice: props.product.productPrice,
   productQuantity: props.product.productQuantity,
+  productExpirationDate: props.product.productExpirationDate,
+  productCategoryId: props.product.productCategoryId,
 })
 
 const validationRules = {
@@ -26,6 +32,8 @@ const validationRules = {
   productCost: [v => !!v || 'ราคาทุนไม่สามารถเว้นว่างได้'],
   productPrice: [v => !!v || 'ราคาสินค้าไม่สามารถเว้นว่างได้'],
   productQuantity: [v => !!v || 'จำนวนสินค้าไม่สามารถเว้นว่างได้'],
+  productExpirationDate: [v => !!v || 'วันหมดอายุสินค้าไม่สามารถเว้นว่างได้'],
+  productCategoryId: [v => !!v || 'หมวดหมู่สินค้าไม่สามารถเว้นว่างได้'],
 }
 
 const barcode = ref('')
@@ -72,27 +80,51 @@ const editProductHandler = async () => {
         :rules="validationRules.productBarcode"
         :disabled="true"
         label="บาร์โค้ดสินค้า"
+        required
       />
       <v-text-field
         v-model="editProduct.productName"
         :rules="validationRules.productName"
         label="ชื่อสินค้า"
+        required
       />
       <v-text-field
         v-model="editProduct.productCost"
         :rules="validationRules.productCost"
         label="ราคาทุน"
+        required
       />
       <v-text-field
         v-model="editProduct.productPrice"
         :rules="validationRules.productPrice"
-        label="ราคาสินค้า"
+        label="ราคาขาย"
+        required
       />
       <v-text-field
         v-model="editProduct.productQuantity"
         :rules="validationRules.productQuantity"
         label="จำนวนสินค้า"
+        required
       />
+      <v-text-field
+        v-model="editProduct.productExpirationDate"
+        :rules="validationRules.productExpirationDate"
+        label="วันหมดอายุสินค้า"
+        type="date"
+        required
+      />
+      <v-select
+        v-model="editProduct.productCategoryId"
+        :items="props.productCategories.map(category => {
+          return {
+            title: category.productCategoryName,
+            value: category.productCategoryId,
+          }
+        })"
+        :rules="validationRules.productCategoryId"
+        label="หมวดหมู่สินค้า"
+        required
+       />
       <v-btn
         @click="editProductHandler"
         block

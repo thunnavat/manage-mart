@@ -1,4 +1,5 @@
 const product = require("../models/product.js");
+const productCategory = require("../models/productCategory.js");
 
 const getAllProducts = async (req, res) => {
   try {
@@ -17,7 +18,9 @@ const addProduct = async (req, res) => {
       productCost,
       productPrice,
       productQuantity,
+      productExpirationDate,
       productImage,
+      productCategoryId,
     } = req.body;
     if (productName === "") return res.status(400).json({ message: "Product name is required" });
     const newProduct = await product.create({
@@ -26,7 +29,9 @@ const addProduct = async (req, res) => {
       productCost: productCost,
       productPrice: productPrice,
       productQuantity: productQuantity,
+      productExpirationDate: productExpirationDate,
       productImage: productImage,
+      productCategoryId: productCategoryId,
     });
     res.status(201).json(newProduct);
   } catch (error) {
@@ -42,6 +47,8 @@ const updateProduct = async (req, res) => {
       productCost: req.body.productCost,
       productPrice: req.body.productPrice,
       productQuantity: req.body.productQuantity,
+      productExpirationDate: req.body.productExpirationDate,
+      productCategoryId: req.body.productCategoryId,
     }
     if (editProduct.productName === "") return res.status(400).json({ message: "Product name is required" });
     const productToUpdate = await product.findOne({
@@ -52,6 +59,8 @@ const updateProduct = async (req, res) => {
       productToUpdate.productCost = editProduct.productCost
       productToUpdate.productPrice = editProduct.productPrice
       productToUpdate.productQuantity = editProduct.productQuantity
+      productToUpdate.productExpirationDate = editProduct.productExpirationDate
+      productToUpdate.productCategoryId = editProduct.productCategoryId
       await productToUpdate.save();
       res.status(200).json(productToUpdate);
     } else {

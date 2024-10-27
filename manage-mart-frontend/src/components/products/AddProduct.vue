@@ -4,6 +4,13 @@ import router from '@/router'
 import { addProduct } from '@/utils/services/productService.js'
 import BaseHeader from '@/components/BaseHeader.vue'
 
+const props = defineProps({
+  productCategories: {
+    type: Array,
+    required: true,
+  },
+})
+
 const successDialog = ref(false)
 
 const newProduct = ref({
@@ -12,6 +19,8 @@ const newProduct = ref({
   productCost: '',
   productPrice: '',
   productQuantity: '',
+  productExpirationDate: '',
+  productCategoryId: '',
 })
 
 const validationRules = {
@@ -20,6 +29,8 @@ const validationRules = {
   productCost: [v => !!v || 'ราคาทุนไม่สามารถเว้นว่างได้'],
   productPrice: [v => !!v || 'ราคาสินค้าไม่สามารถเว้นว่างได้'],
   productQuantity: [v => !!v || 'จำนวนสินค้าไม่สามารถเว้นว่างได้'],
+  productExpirationDate: [v => !!v || 'วันหมดอายุสินค้าไม่สามารถเว้นว่างได้'],
+  productCategoryId: [v => !!v || 'หมวดหมู่สินค้าไม่สามารถเว้นว่างได้'],
 }
 
 const barcode = ref('')
@@ -53,11 +64,13 @@ const resetForm = () => {
     productCost: '',
     productPrice: '',
     productQuantity: '',
+    productExpirationDate: '',
+    productCategoryId: '',
   }
 }
 
 const addProductHandler = async () => {
-  const { productBarcode, productName, productCost, productPrice, productQuantity } =
+  const { productBarcode, productName, productCost, productPrice, productQuantity, productExpirationDate, productCategoryId } =
     newProduct.value
   const product = {
     productBarcode,
@@ -65,6 +78,8 @@ const addProductHandler = async () => {
     productCost,
     productPrice,
     productQuantity,
+    productExpirationDate,
+    productCategoryId,
   }
   const response = await addProduct(product)
   if (response.status === 201) {
@@ -74,6 +89,7 @@ const addProductHandler = async () => {
     alert('เพิ่มสินค้าไม่สำเร็จ')
   }
 }
+
 </script>
 
 <template>
@@ -84,27 +100,51 @@ const addProductHandler = async () => {
         v-model="newProduct.productBarcode"
         :rules="validationRules.productBarcode"
         label="บาร์โค้ดสินค้า"
+        required
       />
       <v-text-field
         v-model="newProduct.productName"
         :rules="validationRules.productName"
         label="ชื่อสินค้า"
+        required
       />
       <v-text-field
         v-model="newProduct.productCost"
         :rules="validationRules.productCost"
         label="ราคาทุน"
+        required
       />
       <v-text-field
         v-model="newProduct.productPrice"
         :rules="validationRules.productPrice"
-        label="ราคาสินค้า"
+        label="ราคาขาย"
+        required
       />
       <v-text-field
         v-model="newProduct.productQuantity"
         :rules="validationRules.productQuantity"
         label="จำนวนสินค้า"
+        required
       />
+      <v-text-field
+        v-model="newProduct.productExpirationDate"
+        :rules="validationRules.productExpirationDate"
+        label="วันหมดอายุสินค้า"
+        type="date"
+        required
+      />
+      <v-select
+        v-model="newProduct.productCategoryId"
+        :items="props.productCategories.map(category => {
+          return {
+            title: category.productCategoryName,
+            value: category.productCategoryId,
+          }
+        })"
+        :rules="validationRules.productCategoryId"
+        label="หมวดหมู่สินค้า"
+        required
+       />
       <v-btn
         @click="addProductHandler"
         block

@@ -1,12 +1,14 @@
 <script setup>
 import { ref, onBeforeMount } from 'vue'
 import { getProducts, deleteProduct } from '@/utils/services/productService.js'
+import { getProductCategories } from '@/utils/services/productCategoryService'
 import AddProduct from '@/components/products/AddProduct.vue'
 import EditProduct from '@/components/products/EditProduct.vue'
 import BaseHeader from '@/components/BaseHeader.vue'
 import router from '@/router'
 
 const products = ref([])
+const productCategories = ref([])
 const search = ref('')
 const headers = [
   {
@@ -19,11 +21,16 @@ const headers = [
   { key: 'productCost', title: 'ราคาทุน' },
   { key: 'productPrice', title: 'ราคาขาย' },
   { key: 'productQuantity', title: 'จำนวน' },
+  { key: 'productExpirationDate', title: 'วันหมดอายุ' },
+  { key: 'productCategoryId', title: 'หมวดหมู่' },
   { key: 'actions', title: 'การดำเนินการ', sortable: false },
 ]
 
 onBeforeMount(async () => {
   products.value = await getProducts().then(response => response.data)
+  productCategories.value = await getProductCategories().then(
+    response => response.data,
+  )
 })
 
 const barcode = ref('')
@@ -71,7 +78,7 @@ const deleteProductHandler = async productBarcode => {
 
     <template v-slot:default="{ isActive }">
       <v-card>
-        <AddProduct />
+        <AddProduct :product-categories="productCategories" />
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -101,6 +108,12 @@ const deleteProductHandler = async productBarcode => {
     :headers="headers"
     :search="search"
   >
+    <template v-slot:[`item.productCategoryId`]="{ item }">
+      {{
+        productCategories.find((category) => category.productCategoryId === item.productCategoryId)
+          ?.productCategoryName
+      }}
+    </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-dialog max-width="500">
         <template v-slot:activator="{ props: activatorProps }">
@@ -114,7 +127,10 @@ const deleteProductHandler = async productBarcode => {
         </template>
         <template v-slot:default="{ isActive }">
           <v-card>
-            <EditProduct :product="item" />
+            <EditProduct
+              :product="item"
+              :product-categories="productCategories"
+            />
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn

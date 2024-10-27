@@ -11,7 +11,7 @@ export const getProducts = async () => {
   }
 }
 
-export const addProduct = async product => {
+export const addProduct = async (product) => {
   try {
     const response = await axios.post(API_URL, product, {
       headers: {
@@ -24,9 +24,9 @@ export const addProduct = async product => {
   }
 }
 
-export const updateProduct = async (id, product) => {
+export const updateProduct = async (productBarcode, product) => {
   try {
-    const response = await axios.put(`${API_URL}/${id}`, product, {
+    const response = await axios.put(`${API_URL}/${productBarcode}`, product, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -37,9 +37,9 @@ export const updateProduct = async (id, product) => {
   }
 }
 
-export const deleteProduct = async id => {
+export const deleteProduct = async (productBarcode) => {
   try {
-    const response = await axios.delete(`${API_URL}/${id}`)
+    const response = await axios.delete(`${API_URL}/${productBarcode}`)
     return response
   } catch (error) {
     return error
