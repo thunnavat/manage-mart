@@ -22,7 +22,6 @@ const editProduct = ref({
   productCost: props.product.productCost,
   productPrice: props.product.productPrice,
   productQuantity: props.product.productQuantity,
-  productExpirationDate: props.product.productExpirationDate,
   productCategoryId: props.product.productCategoryId,
 })
 
@@ -108,7 +107,6 @@ const editProductHandler = async () => {
       />
       <v-text-field
         v-model="editProduct.productExpirationDate"
-        :rules="validationRules.productExpirationDate"
         label="วันหมดอายุสินค้า"
         type="date"
         required
