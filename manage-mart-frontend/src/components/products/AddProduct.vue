@@ -19,7 +19,7 @@ const newProduct = ref({
   productCost: '',
   productPrice: '',
   productQuantity: '',
-  productExpirationDate: '',
+  productExpirationDate,
   productCategoryId: '',
 })
 
@@ -63,7 +63,7 @@ const resetForm = () => {
     productCost: '',
     productPrice: '',
     productQuantity: '',
-    productExpirationDate: '',
+    productExpirationDate,
     productCategoryId: '',
   }
 }
