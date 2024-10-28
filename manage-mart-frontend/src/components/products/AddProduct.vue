@@ -29,7 +29,6 @@ const validationRules = {
   productCost: [v => !!v || 'ราคาทุนไม่สามารถเว้นว่างได้'],
   productPrice: [v => !!v || 'ราคาสินค้าไม่สามารถเว้นว่างได้'],
   productQuantity: [v => !!v || 'จำนวนสินค้าไม่สามารถเว้นว่างได้'],
-  productExpirationDate: [v => !!v || 'วันหมดอายุสินค้าไม่สามารถเว้นว่างได้'],
   productCategoryId: [v => !!v || 'หมวดหมู่สินค้าไม่สามารถเว้นว่างได้'],
 }
 
@@ -128,7 +127,6 @@ const addProductHandler = async () => {
       />
       <v-text-field
         v-model="newProduct.productExpirationDate"
-        :rules="validationRules.productExpirationDate"
         label="วันหมดอายุสินค้า"
         type="date"
         required
