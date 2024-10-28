@@ -22,6 +22,7 @@ const editProduct = ref({
   productCost: props.product.productCost,
   productPrice: props.product.productPrice,
   productQuantity: props.product.productQuantity,
+  productExpirationDate: props.product.productExpirationDate,
   productCategoryId: props.product.productCategoryId,
 })
 
@@ -31,7 +32,6 @@ const validationRules = {
   productCost: [v => !!v || 'ราคาทุนไม่สามารถเว้นว่างได้'],
   productPrice: [v => !!v || 'ราคาสินค้าไม่สามารถเว้นว่างได้'],
   productQuantity: [v => !!v || 'จำนวนสินค้าไม่สามารถเว้นว่างได้'],
-  productExpirationDate: [v => !!v || 'วันหมดอายุสินค้าไม่สามารถเว้นว่างได้'],
   productCategoryId: [v => !!v || 'หมวดหมู่สินค้าไม่สามารถเว้นว่างได้'],
 }
 
