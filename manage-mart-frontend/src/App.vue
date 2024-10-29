@@ -2,7 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 </script>
 
-<template>
+<template class="printableArea">
   <header>
     <img
       alt="Vue logo"
@@ -21,4 +21,17 @@ import { RouterLink, RouterView } from 'vue-router'
   <RouterView />
 </template>
 
-<style scoped></style>
+<style>
+.printableArea {
+    width: 8.5cm !important; 
+    height:100% !important;
+}
+ 
+@page {
+    size: 8cm auto !important;
+    width: 8cm !important;
+    height: 100% !important; 
+    margin: 0 !important;
+    margin-left: 5px !important;
+}
+</style>
