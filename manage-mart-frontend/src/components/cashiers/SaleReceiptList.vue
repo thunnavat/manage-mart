@@ -195,6 +195,7 @@ const saveReceipt = async () => {
             productByBarcode.data.productQuantity - sellProduct.productQuantity,
         }
         await updateProduct(productByBarcode.data.productBarcode, product)
+        alert('ชำระเงินสำเร็จ')
         clearSaleReceipt()
       }
     })
@@ -277,7 +278,6 @@ const saveReceipt = async () => {
           วิธีชำระคงเหลือ:
           <PaymentSelected
             :payment-methods="payDiffernceMethods"
-            :default-payment-method="1"
             @select-payment-method="payDifferenceMethodHandler"
           />
         </li>
@@ -302,7 +302,7 @@ const saveReceipt = async () => {
       </div>
     </ul>
     <v-btn @click="saveReceipt">ชำระเงินสำเร็จ</v-btn>
-    <v-btn>ยกเลิกการชำระเงิน</v-btn>
+    <v-btn @click="clearSaleReceipt">ยกเลิกการชำระเงิน</v-btn>
   </div>
 </template>
 
