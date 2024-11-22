@@ -40,7 +40,6 @@ document.addEventListener('keydown', event => {
     clearInterval(interval.value)
   }
   if (event.code === 'Enter') {
-    console.log(barcode.value)
     if (barcode.value) {
       search.value = barcode.value
     }

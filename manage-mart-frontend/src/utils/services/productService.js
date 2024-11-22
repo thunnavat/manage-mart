@@ -11,7 +11,16 @@ export const getProducts = async () => {
   }
 }
 
-export const addProduct = async (product) => {
+export const getProductByBarcode = async productBarcode => {
+  try {
+    const response = await axios.get(`${API_URL}/${productBarcode}`)
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
+export const addProduct = async product => {
   try {
     const response = await axios.post(API_URL, product, {
       headers: {
@@ -37,7 +46,7 @@ export const updateProduct = async (productBarcode, product) => {
   }
 }
 
-export const deleteProduct = async (productBarcode) => {
+export const deleteProduct = async productBarcode => {
   try {
     const response = await axios.delete(`${API_URL}/${productBarcode}`)
     return response
