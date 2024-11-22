@@ -9,6 +9,7 @@ import { addSaleReceipt } from '@/utils/services/saleReceiptService'
 import { addSaleReceiptProduct } from '@/utils/services/saleReceiptProductService'
 import { getPaymentMethods } from '@/utils/services/paymentMethodService'
 import dayjs from 'dayjs'
+import router from '@/router'
 
 const newSaleReceipt = ref({
   saleReceiptTotalPrice: '',
@@ -197,6 +198,7 @@ const saveReceipt = async () => {
         await updateProduct(productByBarcode.data.productBarcode, product)
         alert('ชำระเงินสำเร็จ')
         clearSaleReceipt()
+        router.go()
       }
     })
   }
