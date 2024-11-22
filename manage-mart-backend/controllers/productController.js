@@ -1,10 +1,25 @@
-const product = require("../models/product.js");
-const productCategory = require("../models/productCategory.js");
+const product = require("../models/product");
 
 const getAllProducts = async (req, res) => {
   try {
     const products = await product.findAll();
     res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getProductByBarcode = async (req, res) => {
+  try {
+    const { productBarcode } = req.params;
+    const productByBarcode = await product.findOne({
+      where: { productBarcode: productBarcode },
+    });
+    if (productByBarcode) {
+      res.status(200).json(productByBarcode);
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -22,7 +37,8 @@ const addProduct = async (req, res) => {
       productImage,
       productCategoryId,
     } = req.body;
-    if (productName === "") return res.status(400).json({ message: "Product name is required" });
+    if (productName === "")
+      return res.status(400).json({ message: "Product name is required" });
     const newProduct = await product.create({
       productBarcode: productBarcode,
       productName: productName,
@@ -49,18 +65,19 @@ const updateProduct = async (req, res) => {
       productQuantity: req.body.productQuantity,
       productExpirationDate: req.body.productExpirationDate,
       productCategoryId: req.body.productCategoryId,
-    }
-    if (editProduct.productName === "") return res.status(400).json({ message: "Product name is required" });
+    };
+    if (editProduct.productName === "")
+      return res.status(400).json({ message: "Product name is required" });
     const productToUpdate = await product.findOne({
       where: { productBarcode: productBarcode },
     });
     if (productToUpdate) {
-      productToUpdate.productName = editProduct.productName
-      productToUpdate.productCost = editProduct.productCost
-      productToUpdate.productPrice = editProduct.productPrice
-      productToUpdate.productQuantity = editProduct.productQuantity
-      productToUpdate.productExpirationDate = editProduct.productExpirationDate
-      productToUpdate.productCategoryId = editProduct.productCategoryId
+      productToUpdate.productName = editProduct.productName ? editProduct.productName : productToUpdate.productName;
+      productToUpdate.productCost = editProduct.productCost ? editProduct.productCost : productToUpdate.productCost;
+      productToUpdate.productPrice = editProduct.productPrice ? editProduct.productPrice : productToUpdate.productPrice;
+      productToUpdate.productQuantity = editProduct.productQuantity ? editProduct.productQuantity : productToUpdate.productQuantity;
+      productToUpdate.productExpirationDate = editProduct.productExpirationDate ? editProduct.productExpirationDate : productToUpdate.productExpirationDate;
+      productToUpdate.productCategoryId = editProduct.productCategoryId ? editProduct.productCategoryId : productToUpdate.productCategoryId;
       await productToUpdate.save();
       res.status(200).json(productToUpdate);
     } else {
@@ -87,6 +104,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getAllProducts,
+  getProductByBarcode,
   addProduct,
   updateProduct,
   deleteProduct,
