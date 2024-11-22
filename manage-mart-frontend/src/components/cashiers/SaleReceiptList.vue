@@ -52,6 +52,7 @@ const clearSaleReceipt = () => {
   newSaleReceipt.value.saleReceiptStateWelfareCardDifference = null
   newSaleReceipt.value.saleReceiptStateWelfareCardPayDifferenceMethod = null
   sellProducts.value = []
+  router.go()
 }
 
 const totalPriceCalculation = () => {
@@ -197,7 +198,6 @@ const saveReceipt = async () => {
         }
         await updateProduct(productByBarcode.data.productBarcode, product)
         alert('ชำระเงินสำเร็จ')
-        router.go()
         clearSaleReceipt()
       }
     })
