@@ -229,6 +229,7 @@ const saveReceipt = async () => {
               type="number"
               :value="sellProduct.productQuantity"
               @change="event => quantityChange(event, index)"
+              class="border border-black"
             />
           </td>
           <td>{{ sellProduct.productTotalPrice }}</td>
@@ -261,6 +262,7 @@ const saveReceipt = async () => {
             type="number"
             :value="newSaleReceipt.saleReceiptStateWelfareCardCash"
             @change="event => stateCardWelfareCashChange(event)"
+            class="border border-black"
           />
         </li>
         <li>
@@ -268,6 +270,7 @@ const saveReceipt = async () => {
           <input
             type="number"
             :value="newSaleReceipt.saleReceiptStateWelfareCardDifference"
+            class="border border-black"
           />
         </li>
         <li>
@@ -292,13 +295,14 @@ const saveReceipt = async () => {
             type="number"
             :value="newSaleReceipt.saleReceiptCash"
             @change="changeCash"
+            class="border border-black"
           />
         </li>
         <li>เงินทอน: {{ newSaleReceipt.saleReceiptChange }}</li>
       </div>
     </ul>
-    <button @click="saveReceipt">ชำระเงินสำเร็จ</button>
-    <button>ยกเลิกการชำระเงิน</button>
+    <v-btn @click="saveReceipt">ชำระเงินสำเร็จ</v-btn>
+    <v-btn>ยกเลิกการชำระเงิน</v-btn>
   </div>
 </template>
 
