@@ -197,8 +197,8 @@ const saveReceipt = async () => {
         }
         await updateProduct(productByBarcode.data.productBarcode, product)
         alert('ชำระเงินสำเร็จ')
-        clearSaleReceipt()
         router.go()
+        clearSaleReceipt()
       }
     })
   }
