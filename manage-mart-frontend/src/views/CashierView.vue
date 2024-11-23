@@ -1,5 +1,4 @@
 <script setup>
-import BaseHeader from '@/components/BaseHeader.vue'
 import SaleReceiptList from '@/components/cashiers/SaleReceiptList.vue';
 </script>
 
