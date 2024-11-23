@@ -42,12 +42,12 @@ onMounted(() => {
               <v-card
                 :color="isSelected ? 'primary' : ''"
                 class="d-flex align-center"
-                height="200"
+                height="120"
                 dark
                 @click="toggle"
               >
                 <v-scroll-y-transition>
-                  <div class="text-h3 flex-grow-1 text-center">
+                  <div class="font-bold text-3xl flex-grow-1 text-center">
                     {{ method.paymentMethodName }}
                   </div>
                 </v-scroll-y-transition>

@@ -8,6 +8,7 @@ import PaymentSelected from './PaymentSelected.vue'
 import { addSaleReceipt } from '@/utils/services/saleReceiptService'
 import { addSaleReceiptProduct } from '@/utils/services/saleReceiptProductService'
 import { getPaymentMethods } from '@/utils/services/paymentMethodService'
+import { getProducts } from '@/utils/services/productService'
 import dayjs from 'dayjs'
 import router from '@/router'
 
@@ -22,6 +23,8 @@ const newSaleReceipt = ref({
   saleReceiptStateWelfareCardDifference: null,
   saleReceiptStateWelfareCardPayDifferenceMethod: null,
 })
+const products = ref([])
+const search = ref(null)
 const sellProducts = ref([])
 const paymentMethods = ref([])
 const payDiffernceMethods = [
@@ -36,10 +39,23 @@ const payDiffernceMethods = [
 ]
 
 onBeforeMount(async () => {
+  products.value = await getProducts().then(response => response.data)
   paymentMethods.value = await getPaymentMethods().then(
     response => response.data,
   )
 })
+
+const headers = [
+  {
+    align: 'start',
+    key: 'productBarcode',
+    title: 'บาร์โค้ดสินค้า',
+    sortable: false,
+  },
+  { key: 'productName', title: 'ชื่อสินค้า' },
+  { key: 'productPrice', title: 'ราคาขาย' },
+  { key: 'actions', title: 'การดำเนินการ', sortable: false },
+]
 
 const clearSaleReceipt = () => {
   newSaleReceipt.value.saleReceiptTotalPrice = ''
@@ -216,11 +232,64 @@ const saveReceipt = async () => {
     alert('ชำระเงินไม่สำเร็จ ไม่สามารถสร้างใบเสร็จได้')
   }
 }
+
+const manualAddProduct = item => {
+  const currentSellProductIndex = sellProducts.value.findIndex(
+    sellProduct => sellProduct.productBarcode === item.productBarcode,
+  )
+  if (currentSellProductIndex !== -1) {
+    alert('สินค้านี้มีอยู่ในรายการแล้ว')
+    return
+  } else {
+    const sellProduct = {
+      productId: item.productId,
+      productBarcode: item.productBarcode,
+      productName: item.productName,
+      productPrice: Number(item.productPrice),
+      productQuantity: 1,
+      productTotalPrice: Number(item.productPrice),
+      productCost: Number(item.productCost),
+      productTotalCost: Number(item.productCost),
+    }
+    sellProducts.value.push(sellProduct)
+    totalPriceCalculation()
+    search.value = null
+  }
+}
 </script>
 
 <template>
   <div>
-    <h1>รายการสั่งซื้อ</h1>
+    <h1 class="mt-2">ค้นหารายการสินค้า</h1>
+    <v-text-field
+      v-model="search"
+      density="compact"
+      label="Search"
+      prepend-inner-icon="mdi-magnify"
+      variant="solo-filled"
+      flat
+      hide-details
+      single-line
+    ></v-text-field>
+    <v-data-table
+      v-if="search"
+      :items="products"
+      :headers="headers"
+      :search="search"
+      items-per-page="3"
+    >
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon
+          size="small"
+          class="mr-2"
+          color="green"
+          @click="manualAddProduct(item)"
+        >
+          mdi-plus-circle
+        </v-icon>
+      </template>
+    </v-data-table>
+    <h1 class="mt-2">รายการสั่งซื้อ</h1>
     <v-table>
       <thead>
         <tr>

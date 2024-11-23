@@ -5,7 +5,6 @@ import SaleReceiptList from '@/components/cashiers/SaleReceiptList.vue';
 
 <template>
   <div>
-    <BaseHeader text="แคชเชียร์" />
     <SaleReceiptList />
   </div>
 </template>
