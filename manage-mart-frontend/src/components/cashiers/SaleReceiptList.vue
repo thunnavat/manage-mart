@@ -175,7 +175,7 @@ const saveReceipt = async () => {
   const saleReceiptResponse = await addSaleReceipt(saleReceiptObject)
   if (saleReceiptResponse.status === 201) {
     const saleReceiptId = saleReceiptResponse.data.saleReceiptId
-    sellProducts.value.forEach(async sellProduct => {
+    const saleProductPromise = sellProducts.value.map(async sellProduct => {
       const saleReceiptProductObject = {
         saleReceiptId: saleReceiptId,
         productId: sellProduct.productId,
@@ -196,11 +196,24 @@ const saveReceipt = async () => {
           productQuantity:
             productByBarcode.data.productQuantity - sellProduct.productQuantity,
         }
-        await updateProduct(productByBarcode.data.productBarcode, product)
-        alert('ชำระเงินสำเร็จ')
-        clearSaleReceipt()
+        const updateProductResponse = await updateProduct(
+          productByBarcode.data.productBarcode,
+          product,
+        )
+        if (updateProductResponse.status !== 200) {
+          alert(
+            `ชำระเงินไม่สำเร็จ ไม่สามารถอัพเดทจำนวนสินสินค้าได้ กรุณาตรวจสอบจำนวนสินค้าในคลังสินค้า ชื่อสินค้า: ${sellProduct.productName}`,
+          )
+        }
+      } else {
+        alert('ชำระเงินไม่สำเร็จ ไม่สามารถสร้างรายการสินค้าในใบเสร็จได้')
       }
     })
+    await Promise.all(saleProductPromise)
+    alert('ชำระเงินสำเร็จ')
+    clearSaleReceipt()
+  } else {
+    alert('ชำระเงินไม่สำเร็จ ไม่สามารถสร้างใบเสร็จได้')
   }
 }
 </script>
