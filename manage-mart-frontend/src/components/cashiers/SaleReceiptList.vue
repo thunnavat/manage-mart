@@ -276,7 +276,6 @@ const manualAddProduct = item => {
       :items="products"
       :headers="headers"
       :search="search"
-      items-per-page="3"
     >
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon
