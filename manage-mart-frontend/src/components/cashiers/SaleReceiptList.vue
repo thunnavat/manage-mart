@@ -148,9 +148,20 @@ const selectedPaymentHandler = paymentMethodId => {
 }
 
 const changeCash = event => {
-  newSaleReceipt.value.saleReceiptCash = event.target.value
-  newSaleReceipt.value.saleReceiptChange =
-    newSaleReceipt.value.saleReceiptCash - newSaleReceipt.value.saleReceiptNet
+  if (
+    newSaleReceipt.value.paymentMethodId === 3 &&
+    newSaleReceipt.value.saleReceiptStateWelfareCardPayDifferenceMethod ===
+      'เงินสด'
+  ) {
+    newSaleReceipt.value.saleReceiptCash = event.target.value
+    newSaleReceipt.value.saleReceiptChange =
+      newSaleReceipt.value.saleReceiptCash -
+      newSaleReceipt.value.saleReceiptStateWelfareCardDifference
+  } else {
+    newSaleReceipt.value.saleReceiptCash = event.target.value
+    newSaleReceipt.value.saleReceiptChange =
+      newSaleReceipt.value.saleReceiptCash - newSaleReceipt.value.saleReceiptNet
+  }
 }
 
 const stateCardWelfareCashChange = event => {
@@ -321,7 +332,7 @@ const manualAddProduct = item => {
             <v-icon
               size="small"
               color="red"
-              @click="() => sellProducts.splice(index, 1)"
+              @click="sellProducts.splice(index, 1), totalPriceCalculation()"
             >
               mdi-delete
             </v-icon>

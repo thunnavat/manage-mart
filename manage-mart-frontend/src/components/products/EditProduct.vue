@@ -17,6 +17,7 @@ const props = defineProps({
 const successDialog = ref(false)
 
 const editProduct = ref({
+  productId: props.product.productId,
   productBarcode: props.product.productBarcode,
   productName: props.product.productName,
   productCost: props.product.productCost,
@@ -59,7 +60,7 @@ document.addEventListener('keydown', event => {
 
 const editProductHandler = async () => {
   const response = await updateProduct(
-    editProduct.value.productBarcode,
+    editProduct.value.productId,
     editProduct.value,
   )
   if (response.status === 200) {
@@ -77,7 +78,6 @@ const editProductHandler = async () => {
       <v-text-field
         v-model="editProduct.productBarcode"
         :rules="validationRules.productBarcode"
-        :disabled="true"
         label="บาร์โค้ดสินค้า"
         required
       />

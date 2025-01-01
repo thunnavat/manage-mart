@@ -33,9 +33,9 @@ export const addProduct = async product => {
   }
 }
 
-export const updateProduct = async (productBarcode, product) => {
+export const updateProduct = async (productId, product) => {
   try {
-    const response = await axios.put(`${API_URL}/${productBarcode}`, product, {
+    const response = await axios.put(`${API_URL}/${productId}`, product, {
       headers: {
         'Content-Type': 'application/json',
       },

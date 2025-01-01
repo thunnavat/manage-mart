@@ -57,8 +57,9 @@ const addProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    const { productBarcode } = req.params;
+    const { productId } = req.params;
     const editProduct = {
+      productBarcode: req.body.productBarcode,
       productName: req.body.productName,
       productCost: req.body.productCost,
       productPrice: req.body.productPrice,
@@ -69,9 +70,10 @@ const updateProduct = async (req, res) => {
     if (editProduct.productName === "")
       return res.status(400).json({ message: "Product name is required" });
     const productToUpdate = await product.findOne({
-      where: { productBarcode: productBarcode },
+      where: { productId: productId },
     });
     if (productToUpdate) {
+      productToUpdate.productBarcode = editProduct.productBarcode ? editProduct.productBarcode : productToUpdate.productBarcode
       productToUpdate.productName = editProduct.productName ? editProduct.productName : productToUpdate.productName;
       productToUpdate.productCost = editProduct.productCost ? editProduct.productCost : productToUpdate.productCost;
       productToUpdate.productPrice = editProduct.productPrice ? editProduct.productPrice : productToUpdate.productPrice;
