@@ -361,12 +361,7 @@ const manualAddProduct = item => {
           />
         </li>
         <li>
-          ยอดคงเหลือต้องชำระ:
-          <input
-            type="number"
-            :value="newSaleReceipt.saleReceiptStateWelfareCardDifference"
-            class="border border-black"
-          />
+          ยอดคงเหลือต้องชำระ: {{ newSaleReceipt.saleReceiptStateWelfareCardDifference }}
         </li>
         <li>
           วิธีชำระคงเหลือ:
