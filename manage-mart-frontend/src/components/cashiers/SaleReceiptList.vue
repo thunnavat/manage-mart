@@ -224,7 +224,7 @@ const saveReceipt = async () => {
             productByBarcode.data.productQuantity - sellProduct.productQuantity,
         }
         const updateProductResponse = await updateProduct(
-          productByBarcode.data.productBarcode,
+          productByBarcode.data.productId,
           product,
         )
         if (updateProductResponse.status !== 200) {
