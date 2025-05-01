@@ -36,28 +36,6 @@ const validationRules = {
   productCategoryId: [v => !!v || 'หมวดหมู่สินค้าไม่สามารถเว้นว่างได้'],
 }
 
-// const barcode = ref('')
-// const interval = ref()
-// document.addEventListener('keydown', event => {
-//   if (interval.value) {
-//     clearInterval(interval.value)
-//   }
-//   if (event.code === 'Enter') {
-//     console.log(barcode.value)
-//     if (barcode.value) {
-//       newProduct.value.productBarcode = barcode.value
-//     }
-//     barcode.value = ''
-//     return
-//   }
-//   if (event.key !== 'Shift') {
-//     barcode.value += event.key
-//     interval.value = setInterval(() => {
-//       barcode.value = ''
-//     }, 100)
-//   }
-// })
-
 barcodeDetector.listen((barcodeData) => {
   if ([...barcodeData.value].some(char => char in thaiToEngMap)) {
     newProduct.value.productBarcode = [...barcodeData.value].map((char) => {

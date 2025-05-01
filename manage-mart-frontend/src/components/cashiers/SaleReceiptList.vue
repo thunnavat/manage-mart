@@ -11,6 +11,10 @@ import { getPaymentMethods } from '@/utils/services/paymentMethodService'
 import { getProducts } from '@/utils/services/productService'
 import dayjs from 'dayjs'
 import router from '@/router'
+import useBarcodeDetector from '@programic/vue-barcode-detector'
+import { thaiToEngMap } from '@/utils/variables/constantVariable'
+
+const barcodeDetector = useBarcodeDetector()
 
 const newSaleReceipt = ref({
   saleReceiptTotalPrice: '',
@@ -81,54 +85,50 @@ const totalPriceCalculation = () => {
     newSaleReceipt.value.saleReceiptDiscount
 }
 
-const barcode = ref('')
-const interval = ref()
-document.addEventListener('keydown', event => {
-  if (interval.value) {
-    clearInterval(interval.value)
-  }
-  if (event.code === 'Enter') {
-    if (barcode.value) {
-      const currentSellProductIndex = sellProducts.value.findIndex(
-        sellProduct => sellProduct.productBarcode === barcode.value,
-      )
-      if (currentSellProductIndex !== -1) {
-        sellProducts.value[currentSellProductIndex].productQuantity += 1
-        sellProducts.value[currentSellProductIndex].productTotalPrice =
-          sellProducts.value[currentSellProductIndex].productQuantity *
-          sellProducts.value[currentSellProductIndex].productPrice
-        sellProducts.value[currentSellProductIndex].productTotalCost =
-          sellProducts.value[currentSellProductIndex].productQuantity *
-          sellProducts.value[currentSellProductIndex].productCost
-        totalPriceCalculation()
-      } else {
-        getProductByBarcode(barcode.value).then(response => {
-          if (response.status === 200) {
-            const product = response.data
-            const sellProduct = {
-              productId: product.productId,
-              productBarcode: product.productBarcode,
-              productName: product.productName,
-              productPrice: Number(product.productPrice),
-              productQuantity: 1,
-              productTotalPrice: Number(product.productPrice),
-              productCost: Number(product.productCost),
-              productTotalCost: Number(product.productCost),
-            }
-            sellProducts.value.push(sellProduct)
-            totalPriceCalculation()
-          }
+const sellBarcode = ref('')
+barcodeDetector.listen(barcodeData => {
+  if (barcodeData.value) {
+    if ([...barcodeData.value].some(char => char in thaiToEngMap)) {
+      sellBarcode.value = [...barcodeData.value]
+        .map(char => {
+          return thaiToEngMap[char] || char
         })
-      }
+        .join('')
+    } else {
+      sellBarcode.value = barcodeData.value
     }
-    barcode.value = ''
-    return
-  }
-  if (event.key !== 'Shift') {
-    barcode.value += event.key
-    interval.value = setInterval(() => {
-      barcode.value = ''
-    }, 100)
+    const currentSellProductIndex = sellProducts.value.findIndex(
+      sellProduct => sellProduct.productBarcode === sellBarcode.value,
+    )
+    if (currentSellProductIndex !== -1) {
+      sellProducts.value[currentSellProductIndex].productQuantity += 1
+      sellProducts.value[currentSellProductIndex].productTotalPrice =
+        sellProducts.value[currentSellProductIndex].productQuantity *
+        sellProducts.value[currentSellProductIndex].productPrice
+      sellProducts.value[currentSellProductIndex].productTotalCost =
+        sellProducts.value[currentSellProductIndex].productQuantity *
+        sellProducts.value[currentSellProductIndex].productCost
+      totalPriceCalculation()
+    } else {
+      getProductByBarcode(sellBarcode.value).then(response => {
+        if (response.status === 200) {
+          const product = response.data
+          const sellProduct = {
+            productId: product.productId,
+            productBarcode: product.productBarcode,
+            productName: product.productName,
+            productPrice: Number(product.productPrice),
+            productQuantity: 1,
+            productTotalPrice: Number(product.productPrice),
+            productCost: Number(product.productCost),
+            productTotalCost: Number(product.productCost),
+          }
+          sellProducts.value.push(sellProduct)
+          totalPriceCalculation()
+        }
+      })
+    }
+    sellBarcode.value = ''
   }
 })
 
@@ -361,7 +361,8 @@ const manualAddProduct = item => {
           />
         </li>
         <li>
-          ยอดคงเหลือต้องชำระ: {{ newSaleReceipt.saleReceiptStateWelfareCardDifference }}
+          ยอดคงเหลือต้องชำระ:
+          {{ newSaleReceipt.saleReceiptStateWelfareCardDifference }}
         </li>
         <li>
           วิธีชำระคงเหลือ:

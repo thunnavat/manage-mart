@@ -6,6 +6,10 @@ import AddProduct from '@/components/products/AddProduct.vue'
 import EditProduct from '@/components/products/EditProduct.vue'
 import BaseHeader from '@/components/BaseHeader.vue'
 import router from '@/router'
+import useBarcodeDetector from '@programic/vue-barcode-detector'
+import { thaiToEngMap } from '@/utils/variables/constantVariable'
+
+const barcodeDetector = useBarcodeDetector()
 
 const products = ref([])
 const productCategories = ref([])
@@ -33,24 +37,13 @@ onBeforeMount(async () => {
   )
 })
 
-const barcode = ref('')
-const interval = ref()
-document.addEventListener('keydown', event => {
-  if (interval.value) {
-    clearInterval(interval.value)
-  }
-  if (event.code === 'Enter') {
-    if (barcode.value) {
-      search.value = barcode.value
-    }
-    barcode.value = ''
-    return
-  }
-  if (event.key !== 'Shift') {
-    barcode.value += event.key
-    interval.value = setInterval(() => {
-      barcode.value = ''
-    }, 100)
+barcodeDetector.listen((barcodeData) => {
+  if ([...barcodeData.value].some(char => char in thaiToEngMap)) {
+    search.value = [...barcodeData.value].map((char) => {
+      return thaiToEngMap[char] || char
+    }).join('')
+  } else {
+    search.value = barcodeData.value
   }
 })
 
