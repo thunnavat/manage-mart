@@ -5,6 +5,7 @@ import { addProduct } from '@/utils/services/productService.js'
 import BaseHeader from '@/components/BaseHeader.vue'
 import useBarcodeDetector from '@programic/vue-barcode-detector'
 import { thaiToEngMap } from '@/utils/variables/constantVariable'
+import { cleanBarcodeInput } from '@/utils/functions/globalFunction'
 
 const props = defineProps({
   productCategories: {
@@ -37,6 +38,9 @@ const validationRules = {
 }
 
 barcodeDetector.listen((barcodeData) => {
+  if (barcodeData.value) {
+    barcodeData.value = cleanBarcodeInput(barcodeData.value)
+  }
   if ([...barcodeData.value].some(char => char in thaiToEngMap)) {
     newProduct.value.productBarcode = [...barcodeData.value].map((char) => {
       return thaiToEngMap[char] || char

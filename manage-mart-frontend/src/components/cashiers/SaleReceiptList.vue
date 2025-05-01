@@ -13,6 +13,7 @@ import dayjs from 'dayjs'
 import router from '@/router'
 import useBarcodeDetector from '@programic/vue-barcode-detector'
 import { thaiToEngMap } from '@/utils/variables/constantVariable'
+import { cleanBarcodeInput } from '@/utils/functions/globalFunction'
 
 const barcodeDetector = useBarcodeDetector()
 
@@ -88,6 +89,7 @@ const totalPriceCalculation = () => {
 const sellBarcode = ref('')
 barcodeDetector.listen(barcodeData => {
   if (barcodeData.value) {
+    barcodeData.value = cleanBarcodeInput(barcodeData.value)
     if ([...barcodeData.value].some(char => char in thaiToEngMap)) {
       sellBarcode.value = [...barcodeData.value]
         .map(char => {
