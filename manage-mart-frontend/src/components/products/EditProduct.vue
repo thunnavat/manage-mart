@@ -3,6 +3,9 @@ import { ref } from 'vue'
 import router from '@/router'
 import BaseHeader from '@/components/BaseHeader.vue'
 import { updateProduct } from '@/utils/services/productService'
+import useBarcodeDetector from '@programic/vue-barcode-detector'
+import { thaiToEngMap } from '@/utils/variables/constantVariable'
+
 const props = defineProps({
   product: {
     type: Object,
@@ -13,6 +16,8 @@ const props = defineProps({
     required: true,
   },
 })
+
+const barcodeDetector = useBarcodeDetector()
 
 const successDialog = ref(false)
 
@@ -36,25 +41,35 @@ const validationRules = {
   productCategoryId: [v => !!v || 'หมวดหมู่สินค้าไม่สามารถเว้นว่างได้'],
 }
 
-const barcode = ref('')
-const interval = ref()
-document.addEventListener('keydown', event => {
-  if (interval.value) {
-    clearInterval(interval.value)
-  }
-  if (event.code === 'Enter') {
-    console.log(barcode.value)
-    if (barcode.value && barcode.value === props.product.productBarcode) {
-      editProduct.value.productQuantity += 1
-    }
-    barcode.value = ''
-    return
-  }
-  if (event.key !== 'Shift') {
-    barcode.value += event.key
-    interval.value = setInterval(() => {
-      barcode.value = ''
-    }, 100)
+// const barcode = ref('')
+// const interval = ref()
+// document.addEventListener('keydown', event => {
+//   if (interval.value) {
+//     clearInterval(interval.value)
+//   }
+//   if (event.code === 'Enter') {
+//     console.log(barcode.value)
+//     if (barcode.value && barcode.value === props.product.productBarcode) {
+//       editProduct.value.productQuantity += 1
+//     }
+//     barcode.value = ''
+//     return
+//   }
+//   if (event.key !== 'Shift') {
+//     barcode.value += event.key
+//     interval.value = setInterval(() => {
+//       barcode.value = ''
+//     }, 100)
+//   }
+// })
+
+barcodeDetector.listen((barcodeData) => {
+  if ([...barcodeData.value].some(char => char in thaiToEngMap)) {
+    editProduct.value.productBarcode = [...barcodeData.value].map((char) => {
+      return thaiToEngMap[char] || char
+    }).join('')
+  } else {
+    editProduct.value.productBarcode = barcodeData.value
   }
 })
 
