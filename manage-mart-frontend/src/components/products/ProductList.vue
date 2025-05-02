@@ -43,10 +43,12 @@ barcodeDetector.listen((barcodeData) => {
     barcodeData.value = cleanBarcodeInput(barcodeData.value)
   }
   if ([...barcodeData.value].some(char => char in thaiToEngMap) && isProbablyThai(barcodeData.value)) {
+    console.log('thai')
     search.value = [...barcodeData.value].map((char) => {
       return thaiToEngMap[char] || char
     }).join('')
   } else {
+    console.log('eng')
     search.value = barcodeData.value
   }
 })
