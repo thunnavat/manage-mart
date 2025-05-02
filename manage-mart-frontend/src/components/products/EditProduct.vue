@@ -5,7 +5,7 @@ import BaseHeader from '@/components/BaseHeader.vue'
 import { updateProduct } from '@/utils/services/productService'
 import useBarcodeDetector from '@programic/vue-barcode-detector'
 import { thaiToEngMap } from '@/utils/variables/constantVariable'
-import { cleanBarcodeInput } from '@/utils/functions/globalFunction'
+import { cleanBarcodeInput, isProbablyThai } from '@/utils/functions/globalFunction'
 
 
 const props = defineProps({
@@ -47,7 +47,7 @@ barcodeDetector.listen((barcodeData) => {
   if (barcodeData.value) {
     barcodeData.value = cleanBarcodeInput(barcodeData.value)
   }
-  if ([...barcodeData.value].some(char => char in thaiToEngMap)) {
+  if ([...barcodeData.value].some(char => char in thaiToEngMap) && isProbablyThai(barcodeData.value)) {
     editProduct.value.productBarcode = [...barcodeData.value].map((char) => {
       return thaiToEngMap[char] || char
     }).join('')
