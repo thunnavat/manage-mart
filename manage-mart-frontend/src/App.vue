@@ -13,7 +13,8 @@ import { RouterLink, RouterView } from 'vue-router'
     <div>
       <nav>
         <RouterLink to="/">แคชเชียร์</RouterLink> | 
-        <RouterLink to="/products">รายการสินค้า</RouterLink> 
+        <RouterLink to="/products">รายการสินค้า</RouterLink> |
+        <RouterLink to="/barcode-printer">ป้ายราคา</RouterLink> 
       </nav>
     </div>
   </header>
