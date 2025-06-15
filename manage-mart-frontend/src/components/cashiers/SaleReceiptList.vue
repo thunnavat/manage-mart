@@ -13,7 +13,10 @@ import dayjs from 'dayjs'
 import router from '@/router'
 import useBarcodeDetector from '@programic/vue-barcode-detector'
 import { thaiToEngMap } from '@/utils/variables/constantVariable'
-import { cleanBarcodeInput, isProbablyThai } from '@/utils/functions/globalFunction'
+import {
+  cleanBarcodeInput,
+  isProbablyThai,
+} from '@/utils/functions/globalFunction'
 
 const barcodeDetector = useBarcodeDetector()
 
@@ -90,7 +93,10 @@ const sellBarcode = ref('')
 barcodeDetector.listen(barcodeData => {
   if (barcodeData.value) {
     barcodeData.value = cleanBarcodeInput(barcodeData.value)
-    if ([...barcodeData.value].some(char => char in thaiToEngMap) && isProbablyThai(barcodeData.value)) {
+    if (
+      [...barcodeData.value].some(char => char in thaiToEngMap) &&
+      isProbablyThai(barcodeData.value)
+    ) {
       sellBarcode.value = [...barcodeData.value]
         .map(char => {
           return thaiToEngMap[char] || char
@@ -302,6 +308,12 @@ const manualAddProduct = item => {
       </template>
     </v-data-table>
     <h1 class="mt-2">รายการสั่งซื้อ</h1>
+    <div class="flex justify-end font-bold text-3xl items-center">
+      <p class="p-4 ml-2 bg-yellow">
+        <span class="font-normal text-2xl">ยอดรวมสุทธิ:</span>
+        {{ newSaleReceipt.saleReceiptNet }} <span class="font-normal text-2xl">บาท</span>
+      </p>
+    </div>
     <v-table>
       <thead>
         <tr>
